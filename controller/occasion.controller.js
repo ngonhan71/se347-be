@@ -4,11 +4,27 @@ const Flower = require('../model/flower.model')
 const occasionController = {
     getAll: async(req, res) => {
         try {
-            const data = await Occasion.find({})
+            const page = req.query.page ? parseInt(req.query.page) : 1
+            const limit = req.query.limit ? parseInt(req.query.limit) : 5
+            const sortByDate = req.query.sortByDate
+
+            let sort = {}
+            if (sortByDate) sort.createdAt = sortByDate === "asc" ? 1 : -1
+            const skip = (page - 1) * limit
+
+            const data = await Occasion.find({}).skip(skip).limit(limit).sort(sort)
+            const count = await Occasion.countDocuments({})
+            const totalPage = Math.ceil(count / limit)
             res.status(200).json({
                 message: 'success',
                 error: 0,
-                data
+                count,
+                data,
+                pagination: {
+                    page,
+                    limit,
+                    totalPage,
+                }
             })
         } catch (error) {
             res.json({
@@ -26,6 +42,30 @@ const occasionController = {
                     message: 'success',
                     error: 0,
                     data
+                })
+            } else {
+                res.status(200).json({
+                    message: 'Không tìm thấy!',
+                    error: 1,
+                    data: {}
+                })
+            }
+        } catch (error) {
+            res.json({
+                message: `Có lỗi xảy ra! ${error.message}`,
+                error: 1,
+            })
+        }
+    },
+    getBySlug: async(req, res) => {
+        try {
+            const { slug } = req.params
+            const data = await Occasion.findOne({slug})
+            if (data) {
+                res.status(200).json({
+                    message: 'success',
+                    error: 0,
+                    data,
                 })
             } else {
                 res.status(200).json({

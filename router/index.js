@@ -5,7 +5,7 @@ const objectRouter = require('./object')
 const flowerRouter = require('./flower')
 const userRouter = require('./user')
 const authRouter = require('./auth')
-
+const orderRouter = require('./order')
 
 function routes(app) {
     
@@ -15,7 +15,7 @@ function routes(app) {
     app.use('/api/v1/flowers', flowerRouter)
     app.use('/api/v1/users', userRouter)
     app.use('/api/v1/auth', authRouter)
-
+    app.use('/api/v1/orders', orderRouter)
 
     app.use('*', function(req, res) {
         res.status(404).json({

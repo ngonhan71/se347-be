@@ -15,9 +15,13 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    birthday: { type: String },
     phoneNumber: { type: String },
     avatar: { type: String, default: 'https://res.cloudinary.com/dbynglvwk/image/upload/v1650182653/NHANLAPTOP/istockphoto-666545204-612x612_yu3gcq.jpg' },
-    address: { type: String },
+    address: [{
+        address: { type: String },
+        isDefault: { type: Boolean, default: false}
+    }],
     codeToResetPassword: { type: String },
     role: { type: Number, default: 0 }
   

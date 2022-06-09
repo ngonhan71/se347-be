@@ -144,8 +144,7 @@ const authController = {
 
             // TH email trong CSDL chưa tồn tại
             const code = randomCode(10)
-            const newVerifyEmail = new VerifyEmail({codeVerifyEmail: code, email})
-            const result = await newVerifyEmail.save()
+           
             const resultSendMail = await transporter.sendMail({
                 from: '"SHOPHOA" <se347.shophoa@gmail.com>',
                 to: email,
@@ -158,7 +157,8 @@ const authController = {
                         <p><b>SHOPHOA</b></p>`
             })
 
-
+            const newVerifyEmail = new VerifyEmail({codeVerifyEmail: code, email})
+            const result = await newVerifyEmail.save()
             return res.json({
                 error: 0,
                 message: 'success'
