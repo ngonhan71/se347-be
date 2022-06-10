@@ -9,10 +9,11 @@ const flowerController = {
             const sortByPrice = req.query.sortByPrice 
             const sortByDate = req.query.sortByDate
             const skip = (page - 1) * limit
-            const { occasion } = req.query
+            const { occasion, key } = req.query
 
             let query = {}
             if (occasion) query.occasion = { $in : occasion}
+            if (key) query.name = { $regex: key, $options:"$i" }
             let sort = {}
 
             if (sortByPrice) sort.price = sortByPrice === "asc" ? 1 : -1

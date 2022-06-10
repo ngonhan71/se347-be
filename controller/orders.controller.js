@@ -37,13 +37,17 @@ const orderController = {
         try {
             const page = req.query.page ? parseInt(req.query.page) : 1
             const limit = req.query.limit ? parseInt(req.query.limit) : 2
+            const sortByDate = req.query.sortByDate
             const { userId } = req.params
             const skip = (page - 1) * limit
 
             let query = {}
             if (userId) query.user = { $in : userId}
 
-            const data = await Order.find(query).skip(skip).limit(limit)
+            let sort = {}
+            if (sortByDate) sort.createdAt = sortByDate === "asc" ? 1 : -1
+
+            const data = await Order.find(query).skip(skip).limit(limit).sort(sort)
 
             const count = await Order.countDocuments(query)
             const totalPage = Math.ceil(count / limit)
